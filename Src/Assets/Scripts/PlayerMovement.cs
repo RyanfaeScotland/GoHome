@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (rigidbody.velocity.magnitude < maxSpeed)
@@ -38,6 +38,10 @@ public class PlayerMovement : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.transform.tag == "Enemy")
+        {
+            Die();
+        }
         if (other.transform.tag == "Goal")
         {
             GameManager.CompleteLevel();
