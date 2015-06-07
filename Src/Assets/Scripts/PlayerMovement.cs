@@ -20,15 +20,33 @@ public class PlayerMovement : MonoBehaviour {
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (rigidbody.velocity.magnitude < maxSpeed)
         {
-            rigidbody.AddForce(input * moveSpeed);
+            rigidbody.AddRelativeForce(input * moveSpeed);
+        }
+
+        if (transform.position.y < -2)
+        {
+            Die();
         }
     }
 
     void OnCollisionEnter(Collision other){
         if (other.transform.tag == "Enemy")
         {
-            Instantiate(deathParticles, transform.position, Quaternion.identity);
-            transform.position = spawn;
+            Die();
         }
-    }    
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Goal")
+        {
+            GameManager.CompleteLevel();
+        }
+    }
+
+    void Die()
+    {
+        Instantiate(deathParticles, transform.position, Quaternion.Euler(270, 0, 0));
+        transform.position = spawn;
+    }
 }
